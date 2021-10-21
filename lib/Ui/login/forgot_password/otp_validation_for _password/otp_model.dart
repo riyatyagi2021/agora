@@ -1,16 +1,13 @@
-class LoginModel {
+class OtpVerifyModel {
   int? status;
   Res? res;
-  Req? req;
-  String? time;
 
-  LoginModel({this.status, this.res, this.req, this.time});
+  OtpVerifyModel({this.status, this.res});
 
-  LoginModel.fromJson(Map<String, dynamic> json) {
+  OtpVerifyModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     res = json['res'] != null ? new Res.fromJson(json['res']) : null;
-    req = json['req'] != null ? new Req.fromJson(json['req']) : null;
-    time = json['time'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -19,10 +16,6 @@ class LoginModel {
     if (this.res != null) {
       data['res'] = this.res?.toJson();
     }
-    if (this.req != null) {
-      data['req'] = this.req?.toJson();
-    }
-    data['time'] = this.time;
     return data;
   }
 }
@@ -98,28 +91,54 @@ class User {
   }
 }
 
-class Req {
-  String? devTkn;
-  String? email;
-  String? password;
+/*class Req {
+  String otp;
+  String type;
+  String email;
+  String devTkn;
+  DevUsers devUsers;
 
-  Req({this.devTkn, this.email, this.password});
+  Req({this.otp, this.type, this.email, this.devTkn, this.devUsers});
 
   Req.fromJson(Map<String, dynamic> json) {
-    devTkn = json['devTkn'];
+    otp = json['otp'];
+    type = json['type'];
     email = json['email'];
-    password = json['password'];
+    devTkn = json['devTkn'];
+    devUsers = json['devUsers'] != null
+        ? new DevUsers.fromJson(json['devUsers'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['devTkn'] = this.devTkn;
+    data['otp'] = this.otp;
+    data['type'] = this.type;
     data['email'] = this.email;
-    data['password'] = this.password;
+    data['devTkn'] = this.devTkn;
+    if (this.devUsers != null) {
+      data['devUsers'] = this.devUsers.toJson();
+    }
     return data;
   }
-}
+}*/
 
+/*
+class DevUsers {
+  String devType;
+  String devTkn;
 
+  DevUsers({this.devType, this.devTkn});
 
+  DevUsers.fromJson(Map<String, dynamic> json) {
+    devType = json['devType'];
+    devTkn = json['devTkn'];
+  }
 
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['devType'] = this.devType;
+    data['devTkn'] = this.devTkn;
+    return data;
+  }
+}*/

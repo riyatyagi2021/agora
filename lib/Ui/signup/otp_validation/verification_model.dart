@@ -1,4 +1,5 @@
 
+/*
 class VerificationModel {
   int? status;
   Error? error;
@@ -18,3 +19,48 @@ class Error {
     msg = json['msg'];
   }
 }
+*/
+
+
+
+
+
+
+class ResentOtpModel {
+  int? status;
+  Res? res;
+
+
+  ResentOtpModel({this.status, this.res, });
+
+  ResentOtpModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    res = json['res'] != null ? new Res.fromJson(json['res']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    if (this.res != null) {
+      data['res'] = this.res!.toJson();
+    }
+    return data;
+  }
+}
+
+class Res {
+  String? msg;
+
+  Res({this.msg});
+
+  Res.fromJson(Map<String, dynamic> json) {
+    msg = json['msg'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['msg'] = this.msg;
+    return data;
+  }
+}
+

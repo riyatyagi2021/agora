@@ -1,10 +1,15 @@
 import 'dart:convert';
+import 'package:agora/Ui/login/forgot_password/otp_validation_for%20_password/otp_model.dart';
 import 'package:agora/Ui/signup/signup_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'otp_validation/verification_model.dart';
 
 class SignupRepository {
+
+ //String userId;
+
+
  Future postSignup(int platform, String name, String username, String email,
       String password,String devTkn) async {
 
@@ -36,7 +41,7 @@ class SignupRepository {
     }
   }
 
-  Future<VerificationModel> otpVerify(int platform, String otpToken, String type, String email,String devTkn) async {
+  Future<OtpVerifyModel> otpVerify(int platform, String otpToken, String type, String email,String devTkn) async {
     final Map<String, dynamic> otp = {
       'devTkn': devTkn,
       'otp': otpToken,
@@ -55,9 +60,11 @@ class SignupRepository {
      // print('otp  ' + otpData.body);
      // final resp =  jsonDecode(otpData.body);
 
-      VerificationModel verificationModel = VerificationModel.fromJson(jsonDecode(otpData.body));
+      OtpVerifyModel verificationModel = OtpVerifyModel.fromJson(jsonDecode(otpData.body));
 
-     print(verificationModel.status.toString()+'---------------------------============================');
+    // print(verificationModel.res!.user!.userId.toString()+'Getting user id?');
+     //var userId=verificationModel.res!.user!.userId.toString();
+
       //print(verificationModel.error.toString()+'---------------------------============================');
       //print("otpresponse"+resp.toString());
 
@@ -68,6 +75,35 @@ class SignupRepository {
     }
   }
 
+
+  resendOtp(int platform, String type, String email,String devTkn)async{
+
+    final Map<String, dynamic> resentOtp = {
+      'devTkn': devTkn,
+      'email': email,
+      'type': type
+    };
+
+    final resentOtpData = await http.post(
+        Uri.parse('https://devapi.joinaurum.com/api/v1/user/forgot/password'),
+        body: resentOtp,
+        headers: {
+          'Authorization': 'Basic YWdvcmE6YTFnJG9yLzphLS1AYXBw',
+          'platform': '1'
+        });
+
+    if(resentOtpData.statusCode==200){
+      print('resent otp ' + resentOtpData.body);
+    //  return resentOtpData;
+
+      ResentOtpModel resentOtpModel=ResentOtpModel.fromJson(jsonDecode(resentOtpData.body));
+      print(resentOtpModel.status.toString()+'resent otp response');
+      return resentOtpModel;
+    }else{
+      throw Exception("There is some error");
+    }
+
+  }
 
 
 
