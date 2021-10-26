@@ -39,8 +39,8 @@ SignupRepository signupRepository=SignupRepository();
           listener: (context, state){
             if(state.isSuccess){
              print(state.isSuccess.toString()+"  Api value");
-
-             final String? id=state.userId;
+               final String? id=state.model.res?.user?.userId;
+            // final String? id=state.userId;
              print("id1 "+id!);
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ResetPassword(idHolder:id)));
             }else if(state.isError){

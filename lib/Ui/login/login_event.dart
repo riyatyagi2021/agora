@@ -24,3 +24,7 @@ class OnLoginApiHit extends LoginEvent {
   late String password;
   OnLoginApiHit(this.email, this.password);
 }
+
+class OnLoginWithGoogle extends LoginEvent{
+  OnLoginWithGoogle();
+}

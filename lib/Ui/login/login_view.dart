@@ -36,13 +36,19 @@ class _LoginState extends State<Login> {
       child: Scaffold(
           body: BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
+          print("my states${state.isGoogleApiSuccess}");
           if (state.isSuccess) {
+          //  print("login${state}");
             isLoading = false;
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => Home()));
           } else if (state.isError) {
             isLoading = false;
             Fluttertoast.showToast(msg: "Check email and password");
+          }else if(state.isGoogleApiSuccess){
+            print(state.isGoogleApiSuccess.toString()+"mnbvcxz");
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Home()));
           }
         },
         builder: (context, state) {
@@ -284,13 +290,20 @@ class _LoginState extends State<Login> {
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          "G",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 28,
-                                              color: Colors.white),
+                                        GestureDetector(
+                                          onTap:(){
+                                            loginbloc.add(OnLoginWithGoogle());
+                                            
+                                            //Fluttertoast.showToast(msg: "msg");
+                                          },
+                                          child: Text(
+                                            "G",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 28,
+                                                color: Colors.white),
+                                          ),
                                         ),
                                       ],
                                     )),

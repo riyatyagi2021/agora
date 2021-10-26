@@ -17,13 +17,13 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
     if (event is OnOtpApi) {
      var isSuccess = await onOtpApiHit(state, event.otp, event.email);
 
-     String? useridd=isSuccess.res!.user!.userId;
-     print(useridd! +" id from bloc to view");
+    // String? useridd=isSuccess.res!.user!.userId;
+     //print(useridd! +" id from bloc to view");
 
       if (isSuccess.status==1) {
-        yield VerificationState.onSuccess(state, false, true,useridd);
+        yield VerificationState.onSuccess(state, false, true,isSuccess);
       } else {
-        yield VerificationState.onSuccess(state, true, false,useridd);
+        yield VerificationState.onSuccess(state, true, false,isSuccess);
       }
     }
   }

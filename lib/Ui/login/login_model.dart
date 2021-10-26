@@ -30,7 +30,7 @@ class LoginModel {
 class Res {
   String? msg;
   int? key;
-  User? user;
+  Userr? user;
   String? bP;
   String? accessToken;
 
@@ -39,7 +39,7 @@ class Res {
   Res.fromJson(Map<String, dynamic> json) {
     msg = json['msg'];
     key = json['key'];
-    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    user = json['user'] != null ? new Userr.fromJson(json['user']) : null;
     bP = json['bP'];
     accessToken = json['accessToken'];
   }
@@ -57,7 +57,7 @@ class Res {
   }
 }
 
-class User {
+class Userr {
   String? userId;
   String? username;
   bool? isNotif;
@@ -66,7 +66,7 @@ class User {
   String? name;
   bool? isFollow;
 
-  User(
+  Userr(
       {this.userId,
         this.username,
         this.isNotif,
@@ -75,7 +75,7 @@ class User {
         this.name,
         this.isFollow});
 
-  User.fromJson(Map<String, dynamic> json) {
+  Userr.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
     username = json['username'];
     isNotif = json['isNotif'];
