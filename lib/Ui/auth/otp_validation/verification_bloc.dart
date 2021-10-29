@@ -1,9 +1,11 @@
-import 'package:agora/Ui/login/forgot_password/otp_validation_for%20_password/otp_model.dart';
-import 'package:agora/Ui/signup/otp_validation/verification_event.dart';
-import 'package:agora/Ui/signup/otp_validation/verification_state.dart';
+
+import 'package:agora/Ui/auth/otp_validation/verification_event.dart';
+import 'package:agora/Ui/auth/otp_validation/verification_state.dart';
+import 'package:agora/Ui/auth/otp_validation_for%20_password/otp_model.dart';
+import 'package:agora/Ui/auth/signup/signup_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../signup_repository.dart';
+
 
 class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
   VerificationBloc() : super(VerificationState.onInit());

@@ -1,5 +1,6 @@
-import 'package:agora/Ui/social/social_model.dart';
-import 'package:agora/Ui/social/social_repo.dart';
+
+import 'package:agora/Ui/auth/social/social_model.dart';
+import 'package:agora/Ui/auth/social/social_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -87,8 +88,8 @@ SocialRepository socialRepository=SocialRepository();
 
     User?  userInfo=await authResult.user;
     print("Username: ${userInfo!.displayName}");
-    print("Email: ${userInfo!.email}");
-    print("UserId: ${userInfo!.uid}");
+    print("Email: ${userInfo.email}");
+    print("UserId: ${userInfo.uid}");
     return userInfo;
 
   }

@@ -1,9 +1,10 @@
 import 'dart:convert';
-import 'package:agora/Ui/login/forgot_password/otp_validation_for%20_password/otp_model.dart';
-import 'package:agora/Ui/signup/signup_model.dart';
+import 'package:agora/Ui/auth/otp_validation/verification_model.dart';
+import 'package:agora/Ui/auth/otp_validation_for%20_password/otp_model.dart';
+import 'package:agora/Ui/auth/signup/signup_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'otp_validation/verification_model.dart';
+
 
 class SignupRepository {
 

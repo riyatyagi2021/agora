@@ -1,8 +1,8 @@
 
-import 'package:agora/Ui/signup/signup_event.dart';
-import 'package:agora/Ui/signup/signup_model.dart';
-import 'package:agora/Ui/signup/signup_repository.dart';
-import 'package:agora/Ui/signup/signup_state.dart';
+import 'package:agora/Ui/auth/signup/signup_event.dart';
+import 'package:agora/Ui/auth/signup/signup_model.dart';
+import 'package:agora/Ui/auth/signup/signup_repository.dart';
+import 'package:agora/Ui/auth/signup/signup_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 

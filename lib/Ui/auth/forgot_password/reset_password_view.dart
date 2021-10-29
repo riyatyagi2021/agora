@@ -1,27 +1,34 @@
-import 'package:agora/Ui/login/forgot_password/otp_validation_for%20_password/otpveriforpassword_view.dart';
-import 'package:agora/Ui/signup/otp_validation/verification_bloc.dart';
-import 'package:agora/Ui/signup/otp_validation/verification_model.dart';
-import 'package:agora/Ui/signup/signup_repository.dart';
+import 'package:agora/Ui/auth/login/login_bloc.dart';
+import 'package:agora/Ui/auth/login/login_view.dart';
+import 'package:agora/Ui/auth/otp_validation_for%20_password/otp_model.dart';
+import 'package:agora/Ui/auth/signup/signup_repository.dart';
+import 'package:agora/Ui/home/home_view.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'forgot_model.dart';
+import 'forgot_repository.dart';
 
-import '../login_bloc.dart';
-import '../login_view.dart';
-
-class ForgotPassword extends StatefulWidget {
-  const ForgotPassword({Key? key}) : super(key: key);
+class ResetPassword extends StatefulWidget {
+  final idHolder;
+  const ResetPassword({Key? key, @required this.idHolder}) : super(key: key);
 
   @override
-  _ForgotPasswordState createState() => _ForgotPasswordState();
+  _ResetPasswordState createState() => _ResetPasswordState();
 }
 
-class _ForgotPasswordState extends State<ForgotPassword> {
-  TextEditingController email = TextEditingController();
+class _ResetPasswordState extends State<ResetPassword> {
+  TextEditingController password = TextEditingController();
   SignupRepository signupRepository=SignupRepository();
+ OtpVerifyModel otpVerifyModel=OtpVerifyModel();
+  ForgotRepository forgotRepository=ForgotRepository();
+
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Container(
         margin: EdgeInsets.only(top: 40),
@@ -42,7 +49,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   height: 30,
                 ),
                 Text(
-                  "Forgot Password",
+                  "Reset Password",
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 30,
@@ -60,21 +67,23 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         ? "enter a valid eamil"
                         : null,
                     keyboardType: TextInputType.emailAddress,
-                    controller: email,
+                    controller: password,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.deny(' '),
+                    ],
+                   // inputFormatters: [LengthLimitingTextInputFormatter(1)],
                     decoration: InputDecoration(
-
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(25)),
-                        labelText: "Email Address",
+                        labelText: "Enter new Password",
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         labelStyle: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                             color: Colors.black),
-                        hintText: "Enter your email",
+                        hintText: "Reset your Password",
                         hintStyle:
-                            TextStyle(color: Colors.black.withOpacity(0.3))
-                    ),
+                            TextStyle(color: Colors.black.withOpacity(0.3))),
                   ),
                 ),
                 Container(
@@ -128,8 +137,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           color: Colors.white),
                     ),
                     onPressed: () {
-                      otpvalidationScreen();
-                     // signupRepository.resendOtp(1, '1', email.text, '123');
+                  resetAndgotoHome();
                     },
                     // onPressed: ,
                   ),
@@ -142,21 +150,27 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     );
   }
 
-  void otpvalidationScreen() async{
-  ResentOtpModel success=  await signupRepository.resendOtp(1, '1', email.text, '123');
+  void resetAndgotoHome() async {
+   //var userId= await otpVerifyModel.res?.user?.userId.toString();
+   // print("userid"+userId.toString());
 
-  if(success.status==1){
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                BlocProvider<VerificationBloc>(
-                  create: (context) =>
-                      VerificationBloc(),
-                  child: OtpVerificationPassword(emailHolder:email.text),
-                )));
+    var id=widget.idHolder.toString();
+        print(id+" userid value in reset view");
 
-  }
+  // var id= signupRepository.userId;
+  //  print("userid"+id.toString());
+
+    ResetPasswordModel  resp=await forgotRepository.resetPasswordApi(1, '123',id, password.text);
+
+    if(resp.status==1){
+      print(resp.status.toString()+"nvbbcx");
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Home()));
+    }else{
+      Fluttertoast.showToast(msg: "There is some error");
+    }
 
   }
 }

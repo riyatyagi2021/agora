@@ -1,4 +1,4 @@
-import 'package:agora/Ui/login/forgot_password/otp_validation_for%20_password/otp_model.dart';
+import 'package:agora/Ui/auth/otp_validation_for%20_password/otp_model.dart';
 
 class VerificationState{
   late final bool  isSuccess;

@@ -1,25 +1,24 @@
+import 'package:agora/Ui/auth/forgot_password/reset_password_view.dart';
+import 'package:agora/Ui/auth/otp_validation/verification_bloc.dart';
+import 'package:agora/Ui/auth/otp_validation/verification_event.dart';
+import 'package:agora/Ui/auth/otp_validation/verification_state.dart';
+import 'package:agora/Ui/auth/signup/signup_repository.dart';
 import 'package:agora/Ui/home/home_view.dart';
-import 'package:agora/Ui/signup/otp_validation/verification_bloc.dart';
-import 'package:agora/Ui/signup/otp_validation/verification_event.dart';
-import 'package:agora/Ui/signup/otp_validation/verification_model.dart';
-import 'package:agora/Ui/signup/otp_validation/verification_state.dart';
-import 'package:agora/Ui/signup/signup_repository.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class Verification extends StatefulWidget {
+class OtpVerificationPassword extends StatefulWidget {
   final emailHolder;
-
-  const Verification({Key? key, @required this.emailHolder}) : super(key: key);
-
+  const OtpVerificationPassword({Key? key, @required this.emailHolder}) : super(key: key);
   @override
-  _VerificationState createState() => _VerificationState();
+  _OtpVerificationPasswordState createState() => _OtpVerificationPasswordState();
 }
 
-class _VerificationState extends State<Verification> {
+
+class _OtpVerificationPasswordState extends State<OtpVerificationPassword> {
 SignupRepository signupRepository=SignupRepository();
   TextEditingController first = TextEditingController();
   TextEditingController second = TextEditingController();
@@ -37,8 +36,11 @@ SignupRepository signupRepository=SignupRepository();
           body: BlocConsumer<VerificationBloc, VerificationState>(
           listener: (context, state){
             if(state.isSuccess){
-              print(state.isSuccess.toString()+"  Api value");
-              navigateToHome();
+             print(state.isSuccess.toString()+"  Api value");
+               final String? id=state.model.res?.user?.userId;
+            // final String? id=state.userId;
+             print("id1 "+id!);
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ResetPassword(idHolder:id)));
             }else if(state.isError){
               Fluttertoast.showToast(msg: "Wrong otp");
             }
@@ -228,7 +230,9 @@ SignupRepository signupRepository=SignupRepository();
                               fontSize: 16,
                               color: Colors.white),
                         ),
-                        onPressed: ()=>verificationBloc.add(OnOtpApi(first.text+second.text+third.text+fourth.text,widget.emailHolder))
+                        onPressed: (){
+                          verificationBloc.add(OnOtpApi(first.text+second.text+third.text+fourth.text,widget.emailHolder));
+                        }
                         // onPressed: ,
                       ),
                     ),
@@ -242,7 +246,5 @@ SignupRepository signupRepository=SignupRepository();
     );
   }
 
-  navigateToHome() async {
-    await Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
-  }
+
 }

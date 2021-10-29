@@ -1,8 +1,8 @@
+import 'package:agora/Ui/auth/forgot_password/forgot_password_view.dart';
+import 'package:agora/Ui/auth/signup/signup_bloc.dart';
+import 'package:agora/Ui/auth/signup/signup_view.dart';
 import 'package:agora/Ui/home/home_view.dart';
-import 'package:agora/Ui/login/forgot_password/forgot_password_view.dart';
-import 'package:agora/Ui/login/login_event.dart';
-import 'package:agora/Ui/signup/signup_bloc.dart';
-import 'package:agora/Ui/signup/signup_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'login_bloc.dart';
+import 'login_event.dart';
 import 'login_state.dart';
 
 final themeColor = new Color(0xfff5a623);
@@ -27,6 +28,17 @@ class _LoginState extends State<Login> {
   TextEditingController password = TextEditingController();
 
   bool isLoading = false;
+
+/*  @override
+  void initState() {
+    super.initState();
+    if(FirebaseAuth.instance.currentUser! != null){
+
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => Home()
+      ));
+    }
+  }*/
 
   @override
   Widget build(BuildContext context) {

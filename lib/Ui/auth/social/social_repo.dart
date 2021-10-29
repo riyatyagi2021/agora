@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:agora/Ui/auth/social/social_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:agora/Ui/social/social_model.dart';
 
 class SocialRepository{
 

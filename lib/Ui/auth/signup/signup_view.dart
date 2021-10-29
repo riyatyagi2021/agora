@@ -1,10 +1,10 @@
-import 'package:agora/Ui/login/login_bloc.dart';
-import 'package:agora/Ui/login/login_view.dart';
-import 'package:agora/Ui/signup/otp_validation/verification_bloc.dart';
-import 'package:agora/Ui/signup/otp_validation/verification_view.dart';
-import 'package:agora/Ui/signup/signup_bloc.dart';
-import 'package:agora/Ui/signup/signup_event.dart';
-import 'package:agora/Ui/signup/signup_state.dart';
+import 'package:agora/Ui/auth/login/login_bloc.dart';
+import 'package:agora/Ui/auth/login/login_view.dart';
+import 'package:agora/Ui/auth/otp_validation/verification_bloc.dart';
+import 'package:agora/Ui/auth/otp_validation/verification_view.dart';
+import 'package:agora/Ui/auth/signup/signup_bloc.dart';
+import 'package:agora/Ui/auth/signup/signup_event.dart';
+import 'package:agora/Ui/auth/signup/signup_state.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

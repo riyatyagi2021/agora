@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-import 'package:agora/Ui/login/login_model.dart';
 import 'package:http/http.dart' as http;
+
+import 'login_model.dart';
 
 class LoginRepository {
   String devTkn = '123';
