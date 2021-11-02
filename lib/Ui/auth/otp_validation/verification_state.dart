@@ -9,8 +9,8 @@ class VerificationState{
 
   VerificationState._(this.isOtpTrue,this.isError,this.isSuccess,this.model);
 
-  VerificationState.onSuccess(VerificationState state,bool isError,bool isSuccess,OtpVerifyModel userId):this._(state.isOtpTrue,false,isSuccess,userId);
-  VerificationState.onFailure(VerificationState state,bool isError,bool isSuccess,OtpVerifyModel userId):this._(state.isOtpTrue,isError,false,userId);
+  VerificationState.onSuccess(VerificationState state,bool isError,bool isSuccess,OtpVerifyModel model):this._(state.isOtpTrue,false,isSuccess,model);
+  VerificationState.onFailure(VerificationState state,bool isError,bool isSuccess,OtpVerifyModel model):this._(state.isOtpTrue,isError,false,model);
   VerificationState.onInit():this._(false,false,false,OtpVerifyModel());
 
 }

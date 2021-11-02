@@ -1,4 +1,5 @@
 import 'package:agora/Ui/auth/forgot_password/forgot_password_view.dart';
+import 'package:agora/Ui/auth/login/login_model.dart';
 import 'package:agora/Ui/auth/signup/signup_bloc.dart';
 import 'package:agora/Ui/auth/signup/signup_view.dart';
 import 'package:agora/Ui/home/home_view.dart';
@@ -9,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'login_bloc.dart';
 import 'login_event.dart';
 import 'login_state.dart';
@@ -28,8 +28,8 @@ class _LoginState extends State<Login> {
   TextEditingController password = TextEditingController();
 
   bool isLoading = false;
-
-/*  @override
+/*
+  @override
   void initState() {
     super.initState();
     if(FirebaseAuth.instance.currentUser! != null){
@@ -52,15 +52,18 @@ class _LoginState extends State<Login> {
           if (state.isSuccess) {
           //  print("login${state}");
             isLoading = false;
+
+            LoginModel model=state.model;
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Home()));
+                context, MaterialPageRoute(builder: (context) => Home(loginModel: model,)));
           } else if (state.isError) {
             isLoading = false;
             Fluttertoast.showToast(msg: "Check email and password");
           }else if(state.isGoogleApiSuccess){
             print(state.isGoogleApiSuccess.toString()+"mnbvcxz");
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Home()));
+            // Navigator.push(
+            //     context, MaterialPageRoute(builder: (context) => Home(loginModel: model,))
+            // );
           }
         },
         builder: (context, state) {

@@ -167,7 +167,7 @@ class _ResetPasswordState extends State<ResetPassword> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => Home()));
+              builder: (context) => Login()));
     }else{
       Fluttertoast.showToast(msg: "There is some error");
     }

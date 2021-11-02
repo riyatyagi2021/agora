@@ -26,7 +26,7 @@ class LoginRepository {
     if (loginRes.statusCode == 200) {
       print("loginmodel" + loginRes.statusCode.toString());
 
-      LoginModel loginModel = LoginModel.fromJson(jsonDecode(loginRes.body));
+          LoginModel loginModel = LoginModel.fromJson(jsonDecode(loginRes.body));
 
       print("bodyresponse" + loginModel.status.toString());
       // print('bodyresponse  ${loginModel.error.msg}');

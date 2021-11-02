@@ -34,6 +34,7 @@ SocialRepository socialRepository=SocialRepository();
         yield LoginState.onEmail(state, false, state.isPasswordvalid);
       }
     }
+
     else if (event is PasswordEvent) {
       bool passwordlength = event.password.length > 6;
       if (event.password.isNotEmpty && passwordlength) {
@@ -42,31 +43,32 @@ SocialRepository socialRepository=SocialRepository();
         yield LoginState.onPassword(state, false, state.isEmailValid);
       }
     }
+
     else if (event is OnLoginEvent) {
       yield LoginState.onLogin(state, true);
     }
+
     else if (event is OnLoginApiHit) {
       var isSuccess = await onLoginApi(state, event.email, event.password);
-      if (isSuccess) {
-        yield LoginState.onLoginSuccess(state, true,false);
+      if (isSuccess.status==1) {
+        yield LoginState.onLoginSuccess(state, true,false,isSuccess);
       }
       else {
-        yield LoginState.onLoginFailure(state, false,true);
+        yield LoginState.onLoginFailure(state, false,true,isSuccess);
       }
     }
 
-    else if(event is OnLoginWithGoogle){
-
+    else if(event is OnLoginWithGoogle) {
      var isGoogleSuccess=await onGoogleApiHit();
      print("google Res "+isGoogleSuccess.status.toString());
       if(isGoogleSuccess.status==1){
 
         print("google Reshjgfdsdfgbnm "+isGoogleSuccess.status.toString());
 
-        yield LoginState.onGoogleSuccess(true);
+        yield LoginState.onGoogleSuccess(true,state);
       }
       else{
-        yield LoginState.onGoogleSuccess(false);
+        yield LoginState.onGoogleSuccess(false,state);
       }
     }
 
@@ -76,8 +78,6 @@ SocialRepository socialRepository=SocialRepository();
   Future<User?>  signInWithGoogle() async{
     GoogleSignInAccount? googleSignInAccount=await googleSignIn.signIn();
     GoogleSignInAuthentication gsa=await googleSignInAccount!.authentication;
-
-
 
     OAuthCredential credential=GoogleAuthProvider.credential(
         accessToken: gsa.accessToken,
@@ -110,15 +110,15 @@ SocialRepository socialRepository=SocialRepository();
   }
 
 
-  Future<bool> onLoginApi(LoginState state, String email, String password) async {
+  Future<LoginModel> onLoginApi(LoginState state, String email, String password) async {
     LoginModel respp = await loginRepository.loginApi(1, devTkn, email, password);
 
     if (respp.status == 1) {
       print("cvbnjhgfdxsxdcvb" + respp.status.toString());
-      return true;
+      return respp;
     } else {
       //  Fluttertoast.showToast(msg: "Please try using different id");
-      return false;
+      return throw Exception("There is something wrong");
     }
   }
 

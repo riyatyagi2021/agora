@@ -242,6 +242,6 @@ SignupRepository signupRepository=SignupRepository();
   }
 
   navigateToHome() async {
-    await Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
+   // await Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home(loginModel: null,)));
   }
 }
