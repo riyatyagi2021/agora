@@ -14,7 +14,7 @@ class LoginRepository {
       'email': email,
       'password': password
     };
-    print("jhvbnm" + login.toString());
+    //print("Login data" + login.toString());
     final loginRes = await http.post(
         Uri.parse('https://devapi.joinaurum.com/api/v1/user/login'),
         body: login,

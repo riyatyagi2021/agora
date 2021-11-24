@@ -1,12 +1,12 @@
-class LoginModel {
+class HomeModel {
   int? status;
   Res? res;
   Req? req;
   String? time;
 
-  LoginModel({this.status, this.res, this.req, this.time});
+  HomeModel({this.status, this.res, this.req, this.time});
 
-  LoginModel.fromJson(Map<String, dynamic> json) {
+  HomeModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     res = json['res'] != null ? new Res.fromJson(json['res']) : null;
     req = json['req'] != null ? new Req.fromJson(json['req']) : null;

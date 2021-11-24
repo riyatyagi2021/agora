@@ -1,12 +1,23 @@
+import 'package:agora/Ui/auth/login/login_bloc.dart';
 import 'package:agora/Ui/auth/login/login_model.dart';
-import 'package:agora/Ui/drawer/user_account_view.dart';
+import 'package:agora/Ui/community/community_view.dart';
+import 'package:agora/Ui/drawer/edit_profile/edit_profile_view.dart';
+import 'package:agora/Ui/user_account/user_account_view.dart';
+import 'package:agora/Ui/home/product_list_model.dart';
+import 'package:agora/Ui/home/products_repository.dart';
+import 'package:agora/Utils/preference_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 class Home extends StatefulWidget {
-  LoginModel loginModel;
-   Home( {Key? key, required this.loginModel, }) : super(key: key);
+  LoginModel? loginModel;
+  Home({
+    Key? key,
+    this.loginModel
+  }) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -15,556 +26,702 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
+  ProductListRepository productListRepository = ProductListRepository();
+  ProductListModel? productListModel;
+  String ACCESS_TOKEN="" ;
+  String NAME="" ;
+  String EMAIl="" ;
+  String PROFILE="" ;
+
+
+
+  @override
+  void initState() {
+
+    //Future.delayed(Duration(milliseconds: 500));
+    super.initState();
+    getApiData();
+  }
+ Future getApiData() async {
+    //var accessToken=widget.loginModel!.res!.accessToken.toString();
+    PreferenceUtils.getAccessToken().then((token) {
+      ACCESS_TOKEN=token.toString();
+     print(ACCESS_TOKEN+" access tokennnn");
+    });
+
+    PreferenceUtils.getLoginName().then((name) {
+      NAME=name.toString();
+    });
+    PreferenceUtils.getLoginEmail().then((email) {
+      EMAIl=email.toString();
+    });
+    PreferenceUtils.getLoginProfile().then((profile) {
+      PROFILE=profile.toString();
+    });
+
+    productListModel = await productListRepository.productsApi(ACCESS_TOKEN);
+
+
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
-    LoginModel loginModell=widget.loginModel;
-    var name=widget.loginModel.res!.user!.name;
-    var id=widget.loginModel.res!.user!.email;
+    LoginModel? loginModell = widget.loginModel;
+
+
     return new Scaffold(
-        key: scaffoldKey,
-        appBar: AppBar(
-          toolbarHeight: 80,
-          backgroundColor: Colors.white,
-          title: Text(
-            "agora",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 40,
-                color: Colors.green[800]),
-          ),
-          // centerTitle: true,
-          titleSpacing: 50,
-          actions: [
-            Icon(
-              Icons.cloud,
-              color: Colors.green,
-              size: 30,
-            ),
-            Container(
-                margin: EdgeInsets.only(right: 10, left: 10),
-                child: Icon(
-                  Icons.notifications,
-                  color: Colors.green,
-                  size: 30,
-                )),
-          ],
-          leading: IconButton(
-            iconSize: 40,
-            color: Colors.black,
-            icon: Icon(Icons.menu),
-            onPressed: () => {scaffoldKey.currentState?.openDrawer()},
-          ),
+      key: scaffoldKey,
+      appBar: AppBar(
+        toolbarHeight: 80,
+        backgroundColor: Colors.white,
+        title: Text(
+          "agora",
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 40,
+              color: Colors.green[800]),
         ),
-        drawer: Drawer(
-          elevation: 5,
-          child: Container(
-            color: Colors.teal,
-            child: ListView(
-              children: [
-                Container(
-                  height: 150,
-                  width: 300,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  color: Colors.greenAccent,
-                 child: Row(
-                   crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        child:GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MyAccount(loginModel:loginModell)));
+        // centerTitle: true,
+        titleSpacing: 50,
+        actions: [
+          Icon(
+            Icons.cloud,
+            color: Colors.green,
+            size: 30,
+          ),
+          Container(
+              margin: EdgeInsets.only(right: 10, left: 10),
+              child: Icon(
+                Icons.notifications,
+                color: Colors.green,
+                size: 30,
+              )),
+        ],
+        leading: IconButton(
+          iconSize: 40,
+          color: Colors.black,
+          icon: Icon(Icons.menu),
+          onPressed: () => {scaffoldKey.currentState?.openDrawer()},
+        ),
+      ),
+      drawer: Drawer(
+        elevation: 5,
+        child: Container(
+          color: Colors.greenAccent,
+          child: ListView(
+            children: [
+              Container(
+                height: 150,
+                width: 300,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                color: Colors.greenAccent,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      child: GestureDetector(
+                        onTap: () { },
+                        child: Stack(
+                          overflow: Overflow.visible,
+                          children:[
+                            Container(
+                              width: 80,
+                              height: 80,
+                              child: ClipRRect(
+                                child: FadeInImage.assetNetwork(
+                               placeholder:'assets/images/u1.jpeg' ,
+                                image: PROFILE,//loginModell!.res!.bP.toString()+loginModell.res!.user!.img.toString()    ,
+                               imageErrorBuilder: (context, error, stackTrace) {
+                              return Container(child: Image.asset("assets/images/u1.jpeg"));
                           },
-                          child: ClipRRect(
-                            child: Image.asset('assets/images/u1.jpeg', width: 80,
-                              height: 80,),
-                            borderRadius:
-                            BorderRadius.circular(50.0),
-                          ),
+                                  //'assets/images/u1.jpeg',
+                                ),
+                                borderRadius: BorderRadius.circular(100.0),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 2,
+                                right: -15,
+                                child: IconButton(
+                              icon: Container(
+                                  decoration: BoxDecoration(
+                               shape: BoxShape.circle,
+                                    color: Colors.white,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Icon(Icons.edit,size: 20,),
+                                  )),
+                              onPressed: (){
+                                Navigator.pop(context);
+                                Navigator.push(context,MaterialPageRoute(builder:(context)=>EditProfile(loginModel:loginModell)));
+
+                              },
+                            ))
+                          ]
+
                         ),
                       ),
-                      SizedBox(width: 20,),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(name.toString()),
-                          Text(id.toString()),
-                        ],
-                      )
-                    ],
-                  ),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(NAME), //widget.loginModel!.res!.user!.name.toString()
+                        Text( EMAIl),//widget.loginModel!.res!.user!.email.toString()
+                      ],
+                    )
+                  ],
                 ),
-                /*UserAccountsDrawerHeader(
-                  currentAccountPicture: CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/u1.jpeg'),
-                  ),
-                  accountName: Text("Riya Tyagi"),
-                  accountEmail: Text("tyagi.riya@gmail.com"),
-                  onDetailsPressed: (){
-                    Navigator.push(context,MaterialPageRoute(builder:(context)=>MyAccount()));
-                  },
-                  //decoration: BoxDecoration(color: Colors.teal),
-                ),*/
-
-                ListTile(
-                  title: Text("Account"),
-                  leading: Icon(Icons.person),
-                   onTap: (){
+              ),
+              Divider(
+                thickness: 2,
+              ),
+              ListTile(
+                title: Text("Account"),
+                leading: Icon(Icons.person),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              MyAccount(loginModel: loginModell)));
+                },
+              ),
+              Divider(),
+              ListTile(
+                title: Text("Invite Friends"),
+                leading: Icon(Icons.star),
+               /* onTap: (){
                     Navigator.pop(context);
-                  Navigator.push(context,MaterialPageRoute(builder:(context)=>MyAccount(loginModel:loginModell)));
-                  },
-                ),
-                Divider(),
-                ListTile(
-                  title: Text("Invite Friends"),
-                  leading: Icon(Icons.star),
-                  /*onTap: (){
-                    Navigator.pop(context);
-                   Navigator.push(context,MaterialPageRoute(builder:(context)=>AnimatedBottomBar()));
+                   Navigator.push(context,MaterialPageRoute(builder:(context)=>Community()));
                   },*/
-                ),
-                Divider(),
-                ListTile(
-                  title: Text("Support"),
-                  leading: Icon(Icons.headphones),
-                  /*  onTap: (){
+              ),
+              Divider(),
+              ListTile(
+                title: Text("Support"),
+                leading: Icon(Icons.headphones),
+                  onTap: (){
                     Navigator.pop(context);
-                    Navigator.push(context,MaterialPageRoute(builder:(context)=>Animations()));
-                  },*/
-                ),
-                Divider(),
-                ListTile(
-                  title: Text("Privacy Policy"),
-                  leading: Icon(Icons.security),
-                  /* onTap: (){
+                    Navigator.push(context,MaterialPageRoute(builder:(context)=>Communityy()));
+                  },
+              ),
+              Divider(),
+              ListTile(
+                title: Text("Privacy Policy"),
+                leading: Icon(Icons.security),
+                /* onTap: (){
                     Navigator.pop(context);
                    Navigator.push(context,MaterialPageRoute(builder:(context)=>Intro()));
                   },*/
-                ),
-                Divider(),
-                ListTile(
-                  title: Text("Terms & conditions"),
-                  leading: Icon(Icons.collections_bookmark_outlined),
-                ),
-                Divider(),
-                ListTile(
-                  title: Text("Settings"),
-                  leading: Icon(Icons.settings),
-                ),
-                Divider(),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 18.0),
-                  decoration: BoxDecoration(
-                      color: Colors.greenAccent,
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                  child: ListTile(
-                    title: Text("Logout"),
-                    leading: Icon(
-                      Icons.exit_to_app,
-                      textDirection: TextDirection.rtl,
-                    ),
-                    // onTap:()=> Navigator.of(context).pop(),
+              ),
+              Divider(),
+              ListTile(
+                title: Text("Terms & conditions"),
+                leading: Icon(Icons.collections_bookmark_outlined),
+              ),
+              Divider(),
+              ListTile(
+                title: Text("Settings"),
+                leading: Icon(Icons.settings),
+              ),
+              Divider(),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 18.0),
+                decoration: BoxDecoration(
+                    color: Colors.greenAccent,
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                child: ListTile(
+                  title: Text("Logout"),
+                  leading: Icon(
+                    Icons.exit_to_app,
+                    textDirection: TextDirection.rtl,
                   ),
+                  // onTap:()=> Navigator.of(context).pop(),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-
-        body: Container(
+      ),
+      body: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           color: Colors.green[100],
           padding: EdgeInsets.symmetric(horizontal: 4, vertical: 10),
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                          hintText: "Share a product",
-                          suffixIcon: Icon(
-                            Icons.add,
-                            size: 40,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.blue, width: 2),
-                              borderRadius: BorderRadius.circular(40)),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(40))),
-                    ),
-                  ),
-                  Container(
-                    height: 550,
-                    width: 360,
-                    margin: EdgeInsets.only(top: 20),
-                    child: Card(
-                        color: Colors.white,
-                        elevation: 10,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  children: [
-                                    Container(
-                                      margin:
-                                          EdgeInsets.fromLTRB(10, 10, 10, 1),
-                                      child: ClipRRect(
-                                        child: Image.asset(
-                                          'assets/images/u1.jpeg',
-                                          width: 60,
-                                          height: 60,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(50.0),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                        top: 15,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Riya Tyagi",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15,
-                                                color: Colors.black),
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            ".",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20,
-                                                color: Colors.black),
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            "30 min",
-                                            style: TextStyle(
-                                                //  fontWeight: FontWeight.bold,
-                                                fontSize: 15,
-                                                color: Colors.black),
-                                          ),
-                                          SizedBox(
-                                            width: 100,
-                                          ),
-                                          Icon(Icons.more_vert_rounded)
-                                        ],
-                                      ),
-                                    ),
-                                    Text(
-                                      "Checkout my latest watch!",
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20)),
-                                              color: Colors.green[100],
-                                            ),
-                                            padding: EdgeInsets.all(5),
-                                            child: Text("#watch")),
-                                        Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20)),
-                                              color: Colors.green[100],
-                                            ),
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 5),
-                                            padding: EdgeInsets.all(5),
-                                            child: Text("#latesttrendy")),
-                                        Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20)),
-                                              color: Colors.green[100],
-                                            ),
-                                            padding: EdgeInsets.all(5),
-                                            child: Text("#tech")),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          height: 100,
-                                          width: 150,
-                                          child: ClipRRect(
-                                            child: Image.asset(
-                                              'assets/images/Sale.jpg',
-                                              width: 60,
-                                              height: 60,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 20,
-                                        ),
-                                        Column(
-                                          children: [
-                                            Image.asset(
-                                              'assets/images/logo.jpeg',
-                                              width: 40,
-                                              height: 40,
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                              '\$100.03',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16),
-                                            ),
-                                            Text(
-                                              '\$200.03',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  decoration: TextDecoration
-                                                      .lineThrough,
-                                                  color: Colors.black26
-                                                      .withOpacity(0.5)),
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    RichText(
-                                      text: TextSpan(
-                                          text:
-                                              "Human Amazfit GTS Smart Watch\n Obsidian  Black ",
-                                          style: TextStyle(
-                                              color: Colors.green[800],
-                                              fontWeight: FontWeight.bold),
-                                          children: [
-                                            TextSpan(
-                                                text: " flipkart.in",
-                                                style: TextStyle(
-                                                    color: Colors.black),
-                                                recognizer:
-                                                    TapGestureRecognizer()
-                                                      ..onTap = () {})
-                                          ]),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Container(
-                                        child: RaisedButton(
-                                      elevation: 5,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 60, vertical: 10),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(30.0),
-                                      ),
-                                      color: Colors.blue[200],
-                                      child: Text(
-                                        "View in site",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15,
-                                            color: Colors.black),
-                                      ),
-                                      onPressed: () {},
-                                    )),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.thumb_up,
-                                          color: Colors.blue,
-                                          size: 30,
-                                        ),
-                                        Text(
-                                          "1.7K",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 15,
-                                              color: Colors.blue),
-                                        ),
-                                        SizedBox(
-                                          width: 30,
-                                        ),
-                                        Icon(
-                                          Icons.message_sharp,
-                                          color: Colors.black,
-                                          size: 30,
-                                        ),
-                                        Text("188"),
-                                        SizedBox(
-                                          width: 30,
-                                        ),
-                                        Icon(
-                                          Icons.shopping_cart,
-                                          color: Colors.black,
-                                          size: 30,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10.0, right: 10),
-                              child: Column(
+          child: SingleChildScrollView(
+            scrollDirection:Axis.vertical ,
+            child:Column(
+              children: [
+                shareProductTF(),
+
+                ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemCount:2            , // productListModel?.res?.products productListModel?.res?.products?.length         ,// productListModel!.res!.products!.length !=null?productListModel!.res!.products!.length:1,
+                  itemBuilder: (BuildContext context, int index) {
+                    return
+                      Container(
+                      height: 600,
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.only(top: 20, left: 5, right: 5),
+                      child: Card(
+                          color: Colors.white,
+                          elevation: 10,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    "View all comments",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                        color: Colors.green[800]),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        width:50,
+                                        height:50 ,
+                                        margin:
+                                        EdgeInsets.fromLTRB(5, 10, 5, 1),
+                                        child: ClipRRect(
+                                          child: FadeInImage.assetNetwork(
+                                            placeholder:'assets/images/u1.jpeg',
+                                            image:productListModel!
+                                                .res!.bP! + productListModel!
+                                                .res!.products![0].userImg
+                                                .toString(),
+                                            imageErrorBuilder: (context, error, stackTrace) {
+                                              return Container(child: Image.asset("assets/images/u1.jpeg"));
+                                            },
+                                            //'assets/images/u1.jpeg',
+                                            width: 30,
+                                            height: 30,
+                                          ),
+                                          borderRadius:
+                                          BorderRadius.circular(50.0),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   SizedBox(
-                                    height: 10,
+                                    width: 5,
                                   ),
-                                  Container(
-                                    padding: EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                      color: Colors.green[100],
-                                    ),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.all(5),
-                                          child: ClipRRect(
-                                            child: Image.asset(
-                                              'assets/images/u1.jpeg',
-                                              width: 50,
-                                              height: 50,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(50.0),
-                                          ),
+                                  Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                          top: 15,
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 8.0, left: 10),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              productListModel!
+                                                  .res!.products![index].name
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
+                                                  color: Colors.black),
+                                            ),
+                                            SizedBox(
+                                              width: 2,
+                                            ),
+                                            Text(
+                                              ".",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 20,
+                                                  color: Colors.black),
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              "30 min",
+                                              style: TextStyle(
+                                                //  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
+                                                  color: Colors.black),
+                                            ),
+                                            SizedBox(
+                                              width: 70,
+                                            ),
+                                            Icon(Icons.more_vert_rounded)
+                                          ],
+                                        ),
+                                      ),
+                                      Text(
+                                        productListModel!
+                                            .res!.products![index].caption
+                                            .toString(),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20)),
+                                                color: Colors.green[100],
+                                              ),
+                                              padding: EdgeInsets.all(5),
+                                              child: Text("#watch")),
+                                          Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20)),
+                                                color: Colors.green[100],
+                                              ),
+                                              margin: EdgeInsets.symmetric(
+                                                  horizontal: 5),
+                                              padding: EdgeInsets.all(5),
+                                              child: Text("#latesttrendy")),
+                                          Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20)),
+                                                color: Colors.green[100],
+                                              ),
+                                              padding: EdgeInsets.all(5),
+                                              child: Text("#tech")),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Row(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            height: 100,
+                                            width: 150,
+                                            child: ClipRRect(
+                                              child: FadeInImage.assetNetwork(
+                                                placeholder:'assets/images/Sale.jpg' ,
+                                                image:productListModel!
+                                                  .res!.products![index].img
+                                                  .toString(),
+                                                imageErrorBuilder: (context, error, stackTrace) {
+                                                  return Container(child: Image.asset("assets/images/Sale.jpg"));
+                                                },
+                                              /*productListModel!
+                                                  .res!.products![index].img
+                                                  .toString().isEmpty?
+                                              placeholder.toString(): productListModel!
+                                                  .res!.products![index].img
+                                                  .toString(),*/
+                                               // 'assets/images/Sale.jpg',
+                                                width: 60,
+                                                height: 60,
+                                              ),
+                                              borderRadius:
+                                              BorderRadius.circular(20),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Column(
                                             children: [
+                                              Container(
+                                                width: 40,
+                                                height: 40,
+                                                child: FadeInImage.assetNetwork(
+                                                   image: productListModel!
+                                                        .res!.products![index].logoUrl
+                                                        .toString(),
+                                                  placeholder: "assets/images/u1.jpeg",
+                                                  imageErrorBuilder: (context, error, stackTrace) {
+                                                    return Container(child: Image.asset("assets/images/logo.jpeg"));
+                                                  },
+
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
                                               Text(
-                                                "Albert Einstein",
+                                                productListModel!
+                                                    .res!.products![index].price
+                                                    .toString() !=null ?  productListModel!
+                                                    .res!.products![index].price
+                                                    .toString():'\$100.03',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 15,
-                                                    color: Colors.black),
+                                                    fontSize: 16),
                                               ),
-                                              Container(
-                                                  width: 200,
-                                                  child: Text(
-                                                      "Hey this is such a beautiful watch"))
+                                              Text(
+                                                '\$200.03',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    decoration: TextDecoration
+                                                        .lineThrough,
+                                                    color: Colors.black26
+                                                        .withOpacity(0.5)),
+                                              ),
                                             ],
-                                          ),
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                        height: 80,
+                                        width: 250,
+                                        child: RichText(
+                                          text: TextSpan(
+                                              text:
+
+                                              productListModel!
+                                                  .res!.products![index].title
+                                                  .toString().isEmpty?"This is such a beautiful product and surely you would like to buy it.Go and check it and enjoy some discount": productListModel!
+                                                  .res!.products![index].title
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  color: Colors.green[800],
+                                                  fontWeight: FontWeight.bold),
+                                              children: [
+                                                TextSpan(
+                                                    text: " flipkart.in",
+                                                    style: TextStyle(
+                                                        color: Colors.black),
+                                                    recognizer:
+                                                    TapGestureRecognizer()
+                                                      ..onTap = () {})
+                                              ]),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Container(
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          suffixIcon: Icon(
-                                            Icons.arrow_upward,
-                                            size: 30,
-                                            color: Colors.green,
-                                          ),
-                                          hintText: "Add a comment",
-                                          prefixIcon: Icon(
-                                            Icons.person,
-                                            color: Colors.green,
-                                            size: 30,
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black,
-                                                  width: 2),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                          child: RaisedButton(
+                                            elevation: 5,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 60, vertical: 10),
+                                            shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(40)),
-                                          border: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black,
-                                                  width: 2),
-                                              borderRadius:
-                                                  BorderRadius.circular(40))),
-                                    ),
+                                              BorderRadius.circular(30.0),
+                                            ),
+                                            color: Colors.blue[200],
+                                            child: Text(
+                                              "View in site",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
+                                                  color: Colors.black),
+                                            ),
+                                            onPressed: () {},
+                                          )),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.thumb_up,
+                                           // color: Colors.blue,
+                                            size: 30,
+                                          ),
+                                          Text(
+                                            productListModel!
+                                                .res!.products![index].likeCount
+                                                .toString(),
+                                           // "1.7K",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15,
+                                                color: Colors.blue
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 30,
+                                          ),
+                                          Icon(
+                                            Icons.message_sharp,
+                                            color: Colors.black,
+                                            size: 30,
+                                          ),
+                                          Text(
+                                            productListModel!
+                                                .res!.products![index].commentCount
+                                                .toString(),
+                                          ),
+                                          SizedBox(
+                                            width: 30,
+                                          ),
+                                          Icon(
+                                            Icons.shopping_cart,
+                                            color: Colors.black,
+                                            size: 30,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            )
-                          ],
-                        )),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ));
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10.0, right: 10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "View all comments",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                          color: Colors.green[800]),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20)),
+                                        color: Colors.green[100],
+                                      ),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            height:50,
+                                            width: 50,
+                                            padding: EdgeInsets.all(5),
+                                            child: ClipRRect(
+                                              child: Image.network(
+                                                productListModel!
+                                                    .res!.communitybP!
+                                                    +
+                                                    productListModel!
+                                                        .res!.products![index].community!.img.toString(),
+                                                width: 50,
+                                                height: 50,
+                                              ),
+                                              borderRadius:
+                                              BorderRadius.circular(50.0),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 8.0, left: 10),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  productListModel!
+                                                      .res!.products![index].community!.name.toString(),
+                                                 // "Albert Einstein",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                      FontWeight.bold,
+                                                      fontSize: 15,
+                                                      color: Colors.black),
+                                                ),
+                                                Container(
+                                                    width: 200,
+                                                    child: Text(
+                                                      productListModel!
+                                                          .res!.products![index].community!.desc.toString(),
+                                                        //"Hey this is such a beautiful watch"
+                                                    ))
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      child: TextFormField(
+                                        decoration: InputDecoration(
+                                            suffixIcon: Icon(
+                                              Icons.arrow_upward,
+                                              size: 30,
+                                              color: Colors.green,
+                                            ),
+                                            hintText: "Add a comment",
+                                            prefixIcon: Icon(
+                                              Icons.person,
+                                              color: Colors.green,
+                                              size: 30,
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.black,
+                                                    width: 2),
+                                                borderRadius:
+                                                BorderRadius.circular(40)),
+                                            border: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.black,
+                                                    width: 2),
+                                                borderRadius:
+                                                BorderRadius.circular(40))),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          )),
+                    );
+                  },
+                ),
+              ],
+            ),
+
+
+          )),
+    );
   }
+
+ Widget shareProductTF()=> Container(
+   child: TextFormField(
+     decoration: InputDecoration(
+         hintText: "Share a product",
+         suffixIcon: Icon(
+           Icons.add_circle_sharp,
+           color: Colors.green,
+           size: 30,
+         ),
+         enabledBorder: OutlineInputBorder(
+             borderSide:
+             BorderSide(color: Colors.blue, width: 2),
+             borderRadius: BorderRadius.circular(40)),
+         border: OutlineInputBorder(
+             borderRadius: BorderRadius.circular(40))),
+   ),
+ );
 }

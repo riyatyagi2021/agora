@@ -1,18 +1,30 @@
 import 'dart:async';
+import 'package:agora/Ui/auth/login/login_model.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'Ui/auth/login/login_bloc.dart';
 import 'Ui/auth/login/login_view.dart';
+import 'Ui/home/home_view.dart';
+import 'Utils/preference_utils.dart';
 
-void main() {
+
+
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -33,7 +45,27 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  String ACCESS_TOKEN="" ;
+  String NAME="" ;
+  String EMAIl="" ;
+  String PROFILE="" ;
 
+  @override
+  void initState() {
+    super.initState();
+    getAccessToken();
+  }
+
+
+  getAccessToken(){
+    PreferenceUtils.getAccessToken().then((token) {
+     ACCESS_TOKEN=token.toString();
+     Fluttertoast.showToast(msg: "tokenn "+ACCESS_TOKEN);
+     print(ACCESS_TOKEN+"  accesstoken");
+    });
+
+
+  }
 
 
 
@@ -80,14 +112,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
-            RaisedButton(onPressed: ()
+            RaisedButton(
+                onPressed: ()
             {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder:
-              (context) => BlocProvider<LoginBloc>(
-                create: (context)=> LoginBloc(),child: Login(), )
-              ));
-
+              if(ACCESS_TOKEN=="null"){
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder:
+                        (context) => BlocProvider<LoginBloc>(
+                      create: (context)=> LoginBloc(),child: Login(), )
+                    ));
+              }
+              else{
+                Navigator.push(context,MaterialPageRoute(builder:(context)=>Home()));
+              }
             },
                 padding: EdgeInsets.symmetric(horizontal: 35,vertical: 15),
                 shape:  RoundedRectangleBorder(

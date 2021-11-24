@@ -1,17 +1,16 @@
 
-
-class UserViewModel {
+class EditProfileModel {
   int? status;
   Res? res;
-  //Req? req;
+  Req? req;
   String? time;
 
-  UserViewModel({this.status, this.res,  this.time});
+  EditProfileModel({this.status, this.res, this.req, this.time});
 
-  UserViewModel.fromJson(Map<String, dynamic> json) {
+  EditProfileModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     res = json['res'] != null ? new Res.fromJson(json['res']) : null;
-    //req = json['req'] != null ? new Req.fromJson(json['req']) : null;
+    req = json['req'] != null ? new Req.fromJson(json['req']) : null;
     time = json['time'];
   }
 
@@ -19,11 +18,11 @@ class UserViewModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['status'] = this.status;
     if (this.res != null) {
-      data['res'] = this.res?.toJson();
+      data['res'] = this.res!.toJson();
     }
-    // if (this.req != null) {
-    //   data['req'] = this.req?.toJson();
-    // }
+    if (this.req != null) {
+      data['req'] = this.req!.toJson();
+    }
     data['time'] = this.time;
     return data;
   }
@@ -43,7 +42,7 @@ class Res {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.user != null) {
-      data['user'] = this.user?.toJson();
+      data['user'] = this.user!.toJson();
     }
     data['bP'] = this.bP;
     return data;
@@ -52,65 +51,72 @@ class Res {
 
 class User {
   String? userId;
+  String? img;
   String? name;
   String? email;
   String? username;
+  String? bio;
+  String? profession;
+  String? instaLink;
+  String? fbLink;
+  String? youTubeLink;
+  String? pinterest;
+  String? twitter;
+  String? webLink;
   int? socialType;
-  int? following;
-  int? followers;
-  int? product;
-  int? isFollower;
-  int? isFollowing;
-  int? unreadCount;
+  String? tiktok;
   bool? isNotif;
-  int? chatCount;
   bool? isFollow;
-  int? likeCount;
 
-  User({this.userId, this.name, this.email, this.username, this.socialType, this.following, this.followers, this.product, this.isFollower, this.isFollowing, this.unreadCount, this.isNotif, this.chatCount, this.isFollow, this.likeCount});
+  User({this.userId,this.img, this.name, this.email, this.username, this.bio, this.profession, this.instaLink, this.fbLink, this.youTubeLink, this.pinterest, this.twitter, this.webLink, this.socialType, this.tiktok, this.isNotif, this.isFollow});
 
   User.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
+    img = json['img'];
     name = json['name'];
     email = json['email'];
     username = json['username'];
+    bio = json['bio'];
+    profession = json['profession'];
+    instaLink = json['instaLink'];
+    fbLink = json['fbLink'];
+    youTubeLink = json['youTubeLink'];
+    pinterest = json['pinterest'];
+    twitter = json['twitter'];
+    webLink = json['webLink'];
     socialType = json['socialType'];
-    following = json['following'];
-    followers = json['followers'];
-    product = json['product'];
-    isFollower = json['isFollower'];
-    isFollowing = json['isFollowing'];
-    unreadCount = json['unreadCount'];
+    tiktok = json['tiktok'];
     isNotif = json['isNotif'];
-    chatCount = json['chatCount'];
     isFollow = json['isFollow'];
-    likeCount = json['likeCount'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['userId'] = this.userId;
+    data['img'] = this.img;
     data['name'] = this.name;
     data['email'] = this.email;
     data['username'] = this.username;
+    data['bio'] = this.bio;
+    data['profession'] = this.profession;
+    data['instaLink'] = this.instaLink;
+    data['fbLink'] = this.fbLink;
+    data['youTubeLink'] = this.youTubeLink;
+    data['pinterest'] = this.pinterest;
+    data['twitter'] = this.twitter;
+    data['webLink'] = this.webLink;
     data['socialType'] = this.socialType;
-    data['following'] = this.following;
-    data['followers'] = this.followers;
-    data['product'] = this.product;
-    data['isFollower'] = this.isFollower;
-    data['isFollowing'] = this.isFollowing;
-    data['unreadCount'] = this.unreadCount;
+    data['tiktok'] = this.tiktok;
     data['isNotif'] = this.isNotif;
-    data['chatCount'] = this.chatCount;
     data['isFollow'] = this.isFollow;
-    data['likeCount'] = this.likeCount;
     return data;
   }
 }
 
-/*
 class Req {
-  Req({});
+
+
+  Req();
 
 Req.fromJson(Map<String, dynamic> json) {
 }
@@ -120,4 +126,3 @@ Map<String, dynamic> toJson() {
   return data;
 }
 }
-*/

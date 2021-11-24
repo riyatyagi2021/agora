@@ -2,7 +2,10 @@ import 'package:agora/Ui/auth/forgot_password/forgot_password_view.dart';
 import 'package:agora/Ui/auth/login/login_model.dart';
 import 'package:agora/Ui/auth/signup/signup_bloc.dart';
 import 'package:agora/Ui/auth/signup/signup_view.dart';
+import 'package:agora/Ui/home/home_bloc.dart';
+import 'package:agora/Ui/home/home_state.dart';
 import 'package:agora/Ui/home/home_view.dart';
+import 'package:agora/Utils/preference_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -13,6 +16,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'login_bloc.dart';
 import 'login_event.dart';
 import 'login_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final themeColor = new Color(0xfff5a623);
 
@@ -26,19 +30,30 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-
   bool isLoading = false;
-/*
+  SharedPreferences? logindata;
+  bool? newuser;
+
+
+
   @override
   void initState() {
     super.initState();
-    if(FirebaseAuth.instance.currentUser! != null){
 
+    /*if(FirebaseAuth.instance.currentUser!= null){
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => Home()
       ));
-    }
-  }*/
+    }*/
+  }
+
+
+  @override
+  void dispose() {
+    email.dispose();
+    password.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,16 +69,29 @@ class _LoginState extends State<Login> {
             isLoading = false;
 
             LoginModel model=state.model;
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Home(loginModel: model,)));
+            PreferenceUtils.setAccessToken(model.res!.accessToken.toString());
+            PreferenceUtils.setLoginEmail(model.res!.user!.email.toString());
+            PreferenceUtils.setLoginName(model.res!.user!.name.toString());
+            PreferenceUtils.setLoginUserName(model.res!.user!.username.toString());
+            PreferenceUtils.setLoginUserId(model.res!.user!.userId.toString());
+            PreferenceUtils.setLoginProfile(model.res!.bP.toString()+model.res!.user!.img.toString());
+
+            // Navigator.push(
+            //     context, MaterialPageRoute(builder: (context) => Home(loginModel: model,)));
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder:
+                    (context) => BlocProvider<HomeBloc>(
+                  create: (context)=> HomeBloc(), child: Home(), )
+                ));
+
           } else if (state.isError) {
             isLoading = false;
             Fluttertoast.showToast(msg: "Check email and password");
           }else if(state.isGoogleApiSuccess){
             print(state.isGoogleApiSuccess.toString()+"mnbvcxz");
-            // Navigator.push(
-            //     context, MaterialPageRoute(builder: (context) => Home(loginModel: model,))
-            // );
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Home())
+            );
           }
         },
         builder: (context, state) {
@@ -250,6 +278,7 @@ class _LoginState extends State<Login> {
                                       state.isEmailValid &&
                                       state.isPasswordvalid)
                                       ? () {
+
                                     setState(() {
                                       isLoading = true;
                                     });
@@ -308,7 +337,7 @@ class _LoginState extends State<Login> {
                                         GestureDetector(
                                           onTap:(){
                                             loginbloc.add(OnLoginWithGoogle());
-                                            
+
                                             //Fluttertoast.showToast(msg: "msg");
                                           },
                                           child: Text(
@@ -362,7 +391,6 @@ class _LoginState extends State<Login> {
                 ),
                 color: Colors.green.shade50.withOpacity(0.8),
               ) :Container()
-
             ],
           );
         },

@@ -1,25 +1,22 @@
 
 import 'dart:convert';
 
-import 'package:agora/Ui/drawer/drawer_model.dart';
+import 'package:agora/Ui/auth/login/login_repository.dart';
+import 'package:agora/Ui/user_account/user_model.dart';
 import 'package:http/http.dart' as http;
 
 class UserViewRepository {
-  String devTkn = '123';
 
   Future<UserViewModel> userViewApi(
       int platform, String accessToken,String userId ) async {
-    final Map<String, dynamic> userProfile= {
-      'accessToken': accessToken,
-      'UserId': userId
-    };
-    print("jhvbnm" + userProfile.toString());
-    final UserProfileRes = await http.post(
+
+    final UserProfileRes = await http.get(
         Uri.parse('https://devapi.joinaurum.com/api/v1/user/view/userId'),
-        body: userProfile,
         headers: {
           'Authorization': 'Basic YWdvcmE6YTFnJG9yLzphLS1AYXBw',
-          'platform': '1'
+          'platform': '1',
+          'accessToken': accessToken,
+          'UserId': userId
         });
 
     if (UserProfileRes.statusCode == 200) {
@@ -27,7 +24,7 @@ class UserViewRepository {
 
       UserViewModel userViewModel = UserViewModel.fromJson(jsonDecode(UserProfileRes.body));
 
-      print("bodyresponse" + userViewModel.status.toString());
+      print("bodyresponse" + UserProfileRes.body);
       // print('bodyresponse  ${loginModel.error.msg}');
       return userViewModel;
     } else {

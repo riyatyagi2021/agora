@@ -1,6 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.agora">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name =
+        "android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name =
+        "android.permission.READ_INTERNAL.STORAGE"/>
    <application
         android:label="agora"
         android:icon="@mipmap/ic_launcher">
