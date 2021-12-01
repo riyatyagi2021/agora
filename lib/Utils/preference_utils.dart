@@ -1,9 +1,11 @@
 
 
+import 'dart:convert';
+
 import 'package:agora/Ui/auth/login/login_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PreferenceUtils{
+ class PreferenceUtils{
 
   static void setAccessToken(String accessToken) async {
     final prefs = await SharedPreferences.getInstance();
@@ -23,6 +25,14 @@ class PreferenceUtils{
   static Future<String?> getLoginName() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('name');
+  }
+  static void setLoginBp(String bp) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('bp', bp);
+  }
+  static Future<String?> getLoginBp() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('bp');
   }
 
   static void setLoginEmail(String email) async {
@@ -59,6 +69,30 @@ class PreferenceUtils{
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('userid');
   }
+
+
+  static void setUserProfile(Userr userData) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('user_data', jsonEncode(userData));
+  }
+
+  static Future<Userr> getUserProfile() async {
+    final prefs = await SharedPreferences.getInstance();
+    Userr userData = Userr();
+
+    var data = prefs.getString('user_data');
+
+    if (data != null) {
+      Userr userData1 = Userr.fromJson(jsonDecode(data));
+      if (userData1 == null) {
+        return userData;
+      } else {
+        return userData1;
+      }
+    }
+    return userData;
+  }
+
 
 
 

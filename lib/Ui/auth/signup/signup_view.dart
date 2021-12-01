@@ -112,15 +112,18 @@ class _SignUpState extends State<SignUp> {
                                 FocusScope.of(context).nextFocus(),
                           ),
                         ),
+
                         Container(
                           margin: EdgeInsets.fromLTRB(50, 30, 50, 2),
-                          child: TextFormField(
+                          child: TextField(
                             onChanged: (String username) {
                               signupbloc.add(UsernameEvent(username));
                             },
+
                             keyboardType: TextInputType.text,
                             controller: username,
                             decoration: InputDecoration(
+
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(25)),
                                 labelText: "Username",

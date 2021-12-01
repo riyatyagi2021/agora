@@ -23,12 +23,20 @@ class _MyAccountState extends State<MyAccount>
   String USER_NAME="" ;
   String ACCESS_TOKEN="" ;
   String USER_ID="" ;
+  String USER_IMAGE="" ;
   @override
   void initState() {
     tabController = TabController(length: 2, vsync: this);
     super.initState();
-   getUserApiData();
   // getUserApiData();
+    setState(() {
+       NAME="" ;
+    USER_NAME="" ;
+    ACCESS_TOKEN="" ;
+     USER_ID="" ;
+      USER_IMAGE="" ;
+    });
+
   }
 
   getUserApiData()async{
@@ -44,19 +52,22 @@ class _MyAccountState extends State<MyAccount>
   @override
   Widget build(BuildContext context) {
   // var name = widget.loginModel!.res!.user!.name;
-    PreferenceUtils.getLoginName().then((name) {
-      NAME=name.toString();
+    PreferenceUtils.getUserProfile().then((profile) {
+      NAME= profile.name.toString();
+      USER_NAME = profile.username.toString();
+      USER_ID= profile.userId.toString();
+      USER_IMAGE= profile.img.toString();
+      print(NAME+"name");
+      print(USER_NAME + " USERANME");
+      print(USER_ID + " USERANME");
+      print(USER_IMAGE + " image");
     });
+
     PreferenceUtils.getAccessToken().then((name) {
       ACCESS_TOKEN=name.toString();
     });
 
- PreferenceUtils.getLoginUserName().then((name) {
-      USER_NAME=name.toString();
-    });
- PreferenceUtils.getLoginUserId().then((name) {
-      USER_ID=name.toString();
-    });
+
 
 print("${userViewModel.res?.user?.followers} folllowers");
     return Scaffold(

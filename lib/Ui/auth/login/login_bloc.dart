@@ -57,7 +57,6 @@ SocialRepository socialRepository=SocialRepository();
         yield LoginState.onLoginFailure(state, false,true,isSuccess);
       }
     }
-
     else if(event is OnLoginWithGoogle) {
      var isGoogleSuccess=await onGoogleApiHit();
      print("google Res "+isGoogleSuccess.status.toString());
@@ -71,9 +70,7 @@ SocialRepository socialRepository=SocialRepository();
         yield LoginState.onGoogleSuccess(false,state);
       }
     }
-
   }
-
 
   Future<User?>  signInWithGoogle() async{
     GoogleSignInAccount? googleSignInAccount=await googleSignIn.signIn();
@@ -94,7 +91,6 @@ SocialRepository socialRepository=SocialRepository();
 
   }
 
-
   Future<SocialVerifyModel> onGoogleApiHit() async {
     String? token =await FirebaseMessaging.instance.getToken();
 
@@ -108,7 +104,6 @@ SocialRepository socialRepository=SocialRepository();
       return throw Exception("There is some error");
     }
   }
-
 
   Future<LoginModel> onLoginApi(LoginState state, String email, String password) async {
     LoginModel respp = await loginRepository.loginApi(1, devTkn, email, password);

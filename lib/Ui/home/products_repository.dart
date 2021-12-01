@@ -19,14 +19,8 @@ class ProductListRepository {
           'Authorization': 'Basic YWdvcmE6YTFnJG9yLzphLS1AYXBw',
           'accessToken': accessToken.toString()
         });
-
     if (productListRes.statusCode == 200) {
       print(" product list api hit? " + productListRes.body);
-
-      /*   Iterable list = json.decode(productListRes.body);
-      products = list.map((productListModel) => ProductListModel.fromJson(productListModel)).toList();
-     print("length+ ${products.length}");
-  */
       ProductListModel productListModel =
           ProductListModel.fromJson(jsonDecode(productListRes.body));
       print("ProductList Body Response " + productListModel.status.toString());

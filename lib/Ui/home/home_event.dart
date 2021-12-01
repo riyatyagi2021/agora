@@ -1,10 +1,12 @@
+import 'package:agora/Ui/home/product_list_model.dart';
+
 abstract class HomeEvent {}
 
-class LoadDataEvent extends HomeEvent{
-  LoadDataEvent();
+class OnHomeApiHit extends HomeEvent {
+  ProductListModel productListModel;
+  OnHomeApiHit(this.productListModel);
 }
 
-
-class OnHomeApiHit extends HomeEvent {
-  OnHomeApiHit();
+class OnDrawerClick extends HomeEvent{
+  OnDrawerClick();
 }

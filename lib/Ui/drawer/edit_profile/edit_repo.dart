@@ -31,7 +31,7 @@ class EditProfileRepository {
     if(response.statusCode==200){
       print(response.statusCode);
       EditProfileModel editProfileModel=EditProfileModel.fromJson(jsonDecode(res.body));
-      print(res.body);
+      print(res.body+" Edit Res body");
     return editProfileModel;
     }
     else {

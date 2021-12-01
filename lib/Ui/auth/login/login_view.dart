@@ -3,10 +3,9 @@ import 'package:agora/Ui/auth/login/login_model.dart';
 import 'package:agora/Ui/auth/signup/signup_bloc.dart';
 import 'package:agora/Ui/auth/signup/signup_view.dart';
 import 'package:agora/Ui/home/home_bloc.dart';
-import 'package:agora/Ui/home/home_state.dart';
 import 'package:agora/Ui/home/home_view.dart';
+import 'package:agora/Ui/home/products_repository.dart';
 import 'package:agora/Utils/preference_utils.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'login_bloc.dart';
 import 'login_event.dart';
 import 'login_state.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 final themeColor = new Color(0xfff5a623);
 
@@ -31,15 +29,10 @@ class _LoginState extends State<Login> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   bool isLoading = false;
-  SharedPreferences? logindata;
-  bool? newuser;
-
-
 
   @override
   void initState() {
     super.initState();
-
     /*if(FirebaseAuth.instance.currentUser!= null){
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => Home()
@@ -65,11 +58,13 @@ class _LoginState extends State<Login> {
         listener: (context, state) {
           print("my states${state.isGoogleApiSuccess}");
           if (state.isSuccess) {
-          //  print("login${state}");
+           //print("login${state}");
             isLoading = false;
 
             LoginModel model=state.model;
             PreferenceUtils.setAccessToken(model.res!.accessToken.toString());
+            PreferenceUtils.setLoginBp(model.res!.bP.toString());
+            PreferenceUtils.setUserProfile(model.res!.user!);
             PreferenceUtils.setLoginEmail(model.res!.user!.email.toString());
             PreferenceUtils.setLoginName(model.res!.user!.name.toString());
             PreferenceUtils.setLoginUserName(model.res!.user!.username.toString());
@@ -81,7 +76,7 @@ class _LoginState extends State<Login> {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder:
                     (context) => BlocProvider<HomeBloc>(
-                  create: (context)=> HomeBloc(), child: Home(), )
+                  create: (context)=> HomeBloc(), child: Home(loginModel: model), )
                 ));
 
           } else if (state.isError) {
@@ -89,9 +84,11 @@ class _LoginState extends State<Login> {
             Fluttertoast.showToast(msg: "Check email and password");
           }else if(state.isGoogleApiSuccess){
             print(state.isGoogleApiSuccess.toString()+"mnbvcxz");
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Home())
-            );
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder:
+                    (context) => BlocProvider<HomeBloc>(
+                  create: (context)=> HomeBloc(), child: Home(), )
+                ));
           }
         },
         builder: (context, state) {
@@ -172,7 +169,7 @@ class _LoginState extends State<Login> {
                                           Icon(Icons.email,
                                               color: Colors.green, size: 20),
                                           Text(
-                                            ' Email Address',
+                                            'Email Address',
                                             style: TextStyle(
                                                 color: Colors.green,
                                                 fontWeight: FontWeight.bold,

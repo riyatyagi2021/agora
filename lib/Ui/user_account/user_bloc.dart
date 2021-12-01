@@ -7,9 +7,8 @@ class UserBloc extends Bloc<UserEvent,UserState>{
   UserBloc(UserState initialState) : super(initialState);
 
   @override
-  Stream<UserState> mapEventToState(UserEvent event) {
+  Stream<UserState> mapEventToState(UserEvent event) async*{
 
-    return super.mapEventToState(event);
   }
 
 

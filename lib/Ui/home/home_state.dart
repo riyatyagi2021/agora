@@ -1,23 +1,26 @@
 
-
-import 'package:agora/Ui/home/home_model.dart';
+import 'package:agora/Ui/auth/login/login_model.dart';
 import 'package:agora/Ui/home/product_list_model.dart';
+import 'package:agora/Ui/home/products_repository.dart';
+import 'package:agora/Utils/preference_utils.dart';
 
 class HomeState{
-
   final bool isSuccess;
   final bool isError;
+  final ProductListRepository repository;
+  final PreferenceUtils prefUtils;
+  final LoginModel loginModel;
   final  ProductListModel model;
 
 
-  HomeState._(this.isSuccess,this.isError,this.model);
+  HomeState._(this.isSuccess,this.isError,this.repository,this.model,this.prefUtils,this.loginModel);
 
-  HomeState.onHomeSuccess(HomeState state, bool isSuccess,bool isError, ProductListModel model)
-      : this._(isSuccess,false,model);
+  HomeState.onHomeSuccess( bool isSuccess,bool isError,ProductListRepository repository,ProductListModel model,PreferenceUtils preferenceUtils,LoginModel loginModel)
+      : this._(isSuccess,false,repository,model,preferenceUtils,loginModel);
 
-  HomeState.onHomeFailure(HomeState state, bool isSuccess,bool isError,ProductListModel model)
-      : this._(false,isError,model);
+  HomeState.onHomeFailure( bool isSuccess,bool isError,ProductListRepository repository,ProductListModel model,PreferenceUtils preferenceUtils,LoginModel loginModel)
+      : this._(false,isError,repository,model,preferenceUtils,loginModel);
 
-  HomeState.onInit() : this._(false, false, ProductListModel());
+  HomeState.onInit() : this._(false, false, ProductListRepository(),ProductListModel(),PreferenceUtils(),LoginModel());
 
 }
