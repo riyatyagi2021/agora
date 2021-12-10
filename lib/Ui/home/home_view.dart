@@ -4,6 +4,7 @@ import 'package:agora/Ui/drawer/edit_profile/edit_bloc.dart';
 import 'package:agora/Ui/drawer/edit_profile/edit_profile_view.dart';
 import 'package:agora/Ui/home/home_bloc.dart';
 import 'package:agora/Ui/user_account/user_account_view.dart';
+import 'package:agora/Ui/user_account/user_bloc.dart';
 import 'package:agora/Utils/preference_utils.dart';
 import 'package:agora/Utils/preference_utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -194,11 +195,11 @@ class _HomeState extends State<Home> {
                       leading: Icon(Icons.person),
                       onTap: () {
                         Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    MyAccount()));
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder:
+                                (context) => BlocProvider<UserBloc>(
+                              create: (context)=> UserBloc(), child: MyAccount(), )
+                            ));
                       },
                     ),
                     Divider(),

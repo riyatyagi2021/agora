@@ -1,12 +1,15 @@
+import 'dart:async';
+import 'dart:async';
 import 'dart:io';
 
 import 'package:agora/Ui/auth/login/login_model.dart';
 import 'package:agora/Ui/drawer/edit_profile/edit_bloc.dart';
+import 'package:agora/Ui/drawer/edit_profile/edit_event.dart';
 import 'package:agora/Ui/drawer/edit_profile/edit_model.dart';
 import 'package:agora/Ui/drawer/edit_profile/edit_repo.dart';
 import 'package:agora/Ui/drawer/edit_profile/edit_state.dart';
-import 'package:agora/Ui/home/home_bloc.dart';
-import 'package:agora/Ui/home/home_state.dart';
+import 'package:agora/Ui/user_account/user_account_view.dart';
+import 'package:agora/Ui/user_account/user_bloc.dart';
 import 'package:agora/Utils/preference_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -54,8 +57,6 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-
-    setState(() {});
   }
 
   @override
@@ -73,12 +74,7 @@ class _EditProfileState extends State<EditProfile> {
     print("${editProfileModel.res?.user?.username?.toString()} username");
     print("${editProfileModel.res?.user?.name?.toString()} name");
 
-
-
-    PreferenceUtils.getAccessToken().then((token) {
-      ACCESS_TOKEN = token.toString();
-      print(ACCESS_TOKEN + " access tokennnn");
-    });
+    final EditProfileBloc editProfileBloc = BlocProvider.of<EditProfileBloc>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -95,6 +91,7 @@ class _EditProfileState extends State<EditProfile> {
           child: BlocConsumer<EditProfileBloc, EditProfileState>(
               listener: (context, state) {},
               builder: (context, state) {
+
                 PreferenceUtils.getUserProfile().then((profile) {
                   NAME = profile.name.toString();
                   UserName = profile.username.toString();
@@ -103,6 +100,8 @@ class _EditProfileState extends State<EditProfile> {
                   print(UserName + " USERANME");
                   print(USER_IMAGE + " image");
                 });
+
+
 
                 PreferenceUtils.getLoginBp().then((bP) {
                   bp=bP.toString();
@@ -400,19 +399,17 @@ class _EditProfileState extends State<EditProfile> {
                                       borderRadius: BorderRadius.circular(35)),
                                   textStyle: TextStyle(fontSize: 20),
                                 ),
-                                onPressed: () async {
-                                  editProfileModel =
-                                      await editProfileRepository.editProfile(
-                                          1,
-                                          username.text,
-                                          ACCESS_TOKEN,
-                                          uploadimage!.absolute);
-                                  print("Picture" +
-                                      editProfileModel.res!.bP.toString() +
-                                      editProfileModel.res!.user!.img
-                                          .toString());
-                                  //   Navigator.push(context,MaterialPageRoute(builder:(context)=>Home()));
-                                  Navigator.pop(context);
+                                onPressed: ()  {
+                                  //print("${username.text}bnmnbnm ${uploadimage!.absolute}"  );
+
+                                  editProfileBloc.add(OnEditApiHit(username.text,uploadimage!.absolute));
+                                    Future.delayed(Duration(milliseconds: 500));
+                                  Navigator.pushReplacement(context,
+                                      MaterialPageRoute(builder:
+                                          (context) => BlocProvider<UserBloc>(
+                                        create: (context)=> UserBloc(), child: MyAccount(), )
+                                      ));
+                                 // Navigator.pop(context);
                                 },
                               ),
                             ),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 abstract class EditProfileEvent {}
 
 class OnEditDataEvent extends EditProfileEvent{
@@ -6,5 +8,7 @@ class OnEditDataEvent extends EditProfileEvent{
 
 
 class OnEditApiHit extends EditProfileEvent {
-  OnEditApiHit();
+  String username;
+  File file;
+  OnEditApiHit(this.username,this.file);
 }

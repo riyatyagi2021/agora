@@ -36,6 +36,7 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
 
      void onHomeApi() async {
     try {
+
     ProductListModel productListModel = await productListRepository.productsApi("");
 
       print("ProductList Resp value" + productListModel.status.toString());

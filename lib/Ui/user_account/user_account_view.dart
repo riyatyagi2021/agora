@@ -1,9 +1,12 @@
 import 'package:agora/Ui/auth/login/login_model.dart';
 import 'package:agora/Ui/user_account/user_account_repo.dart';
+import 'package:agora/Ui/user_account/user_bloc.dart';
 import 'package:agora/Ui/user_account/user_model.dart';
+import 'package:agora/Ui/user_account/user_state.dart';
 import 'package:agora/Utils/preference_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyAccount extends StatefulWidget {
   LoginModel? loginModel;
@@ -81,265 +84,274 @@ print("${userViewModel.res?.user?.followers} folllowers");
               color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),
         ),
       ),
-      body: Container(
-        child: ListView(
-          children: [
-            Column(
-              children: [
-                Container(
-                  height: 1000,
-                  width: MediaQuery.of(context).size.width,
-                  child: Card(
-                    color: Colors.green[100],
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 5,
-                        ),
-                        ClipRRect(
-                          child: Image.asset(
-                            'assets/images/u1.jpeg',
-                            width: 100,
-                            height: 100,
-                          ),
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(NAME,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 30,
-                            )),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(USER_NAME,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                            )),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text("87",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold)),
-                            Text( "",//${userViewModel.res?.user?.followers},//"50",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold)),
-                            Text("80",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text("Listings",
-                                style: TextStyle(
-                                  color: Colors.black.withOpacity(0.6),
-                                  fontSize: 15,
-                                )),
-                            Text("Followers",
-                                style: TextStyle(
-                                  color: Colors.black.withOpacity(0.6),
-                                  fontSize: 15,
-                                )),
-                            Text("Following",
-                                style: TextStyle(
-                                  color: Colors.black.withOpacity(0.6),
-                                  fontSize: 15,
-                                )),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Divider(),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 38.0),
-                          child: Text(
-                            "Here you can see a lot of different sites and select one and start using it ",
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextButton(
-                              onPressed: () {},
-                              child: ClipOval(
-                                  child: Image.asset(
-                                'assets/images/insta.jpeg',
-                                height: 40,
-                                width: 40,
-                              )),
-                            ),
-                            TextButton(
-                              onPressed: () {},
-                              child: ClipOval(
-                                  child: Image.asset(
-                                'assets/images/youtube.png',
-                                height: 40,
-                                width: 40,
-                              )),
-                            ),
-                            TextButton(
-                              onPressed: () {},
-                              child: ClipOval(
-                                  child: Image.asset(
-                                'assets/images/pinterest.png',
-                                height: 40,
-                                width: 40,
-                              )),
-                            ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.facebook),
-                              iconSize: 40,
-                              color: Colors.blue,
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextButton(
-                              onPressed: () {},
-                              child: ClipOval(
-                                  child: Image.asset(
-                                'assets/images/twitter.png',
-                                height: 40,
-                                width: 40,
-                              )),
-                            ),
-                            TextButton(
-                              onPressed: () {},
-                              child: ClipOval(
-                                  child: Image.asset(
-                                'assets/images/web.png',
-                                height: 40,
-                                width: 40,
-                              )),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              //width:double.infinity,
-                              width: 200,
-                              height: 50,
-                              child: ElevatedButton(
-                                child: Text("Analytics"),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.pinkAccent,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(35)),
-                                  textStyle: TextStyle(fontSize: 20),
-                                ),
-                                onPressed: () {},
-                              ),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            ElevatedButton(
-                              child: Text("Edit"),
-                              style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.symmetric(horizontal: 30),
-                                primary: Colors.grey,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(35)),
-                                textStyle: TextStyle(fontSize: 15),
-                              ),
-                              onPressed: () {},
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          height: 55,
-                          padding: EdgeInsets.all(5),
-                          margin: EdgeInsets.symmetric(horizontal: 20),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.blue,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(
-                              25.0,
-                            ),
-                          ),
-                          child: TabBar(
-                            controller: tabController,
-                            indicator: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                25.0,
-                              ),
-                              color: Colors.green,
-                            ),
-                            labelColor: Colors.limeAccent,
-                            unselectedLabelColor: Colors.black,
-                            tabs: [
-                              Tab(
-                                text: 'Shop',
-                              ),
-                              Tab(
-                                text: 'Activity',
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Expanded(
-                          child: TabBarView(
-                            controller: tabController,
+      body: BlocConsumer<UserBloc,UserState>(
+          listener:(context,state){} ,
+          builder: (context,state){
+            var name=state.userViewModel.res?.user?.name.toString();
+            var username=state.userViewModel.res?.user?.username.toString();
+            print(name.toString()+"naaammmmmmmm");
+            print(username.toString()+"useranmeeeeeeeeeeeeeeeeee");
+
+            return Container(
+              child: ListView(
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                        height: 1000,
+                        width: MediaQuery.of(context).size.width,
+                        child: Card(
+                          color: Colors.green[100],
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              shopView(),
-                              activityView(),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              ClipRRect(
+                                child: Image.asset(
+                                  'assets/images/u1.jpeg',
+                                  width: 100,
+                                  height: 100,
+                                ),
+                                borderRadius: BorderRadius.circular(50.0),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(NAME,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 30,
+                                  )),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(USER_NAME,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                  )),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text("87",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold)),
+                                  Text( "",//${userViewModel.res?.user?.followers},//"50",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold)),
+                                  Text("80",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text("Listings",
+                                      style: TextStyle(
+                                        color: Colors.black.withOpacity(0.6),
+                                        fontSize: 15,
+                                      )),
+                                  Text("Followers",
+                                      style: TextStyle(
+                                        color: Colors.black.withOpacity(0.6),
+                                        fontSize: 15,
+                                      )),
+                                  Text("Following",
+                                      style: TextStyle(
+                                        color: Colors.black.withOpacity(0.6),
+                                        fontSize: 15,
+                                      )),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Divider(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 38.0),
+                                child: Text(
+                                  "Here you can see a lot of different sites and select one and start using it ",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {},
+                                    child: ClipOval(
+                                        child: Image.asset(
+                                          'assets/images/insta.jpeg',
+                                          height: 40,
+                                          width: 40,
+                                        )),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {},
+                                    child: ClipOval(
+                                        child: Image.asset(
+                                          'assets/images/youtube.png',
+                                          height: 40,
+                                          width: 40,
+                                        )),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {},
+                                    child: ClipOval(
+                                        child: Image.asset(
+                                          'assets/images/pinterest.png',
+                                          height: 40,
+                                          width: 40,
+                                        )),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(Icons.facebook),
+                                    iconSize: 40,
+                                    color: Colors.blue,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {},
+                                    child: ClipOval(
+                                        child: Image.asset(
+                                          'assets/images/twitter.png',
+                                          height: 40,
+                                          width: 40,
+                                        )),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {},
+                                    child: ClipOval(
+                                        child: Image.asset(
+                                          'assets/images/web.png',
+                                          height: 40,
+                                          width: 40,
+                                        )),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    //width:double.infinity,
+                                    width: 200,
+                                    height: 50,
+                                    child: ElevatedButton(
+                                      child: Text("Analytics"),
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.pinkAccent,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(35)),
+                                        textStyle: TextStyle(fontSize: 20),
+                                      ),
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  ElevatedButton(
+                                    child: Text("Edit"),
+                                    style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.symmetric(horizontal: 30),
+                                      primary: Colors.grey,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(35)),
+                                      textStyle: TextStyle(fontSize: 15),
+                                    ),
+                                    onPressed: () {},
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                height: 55,
+                                padding: EdgeInsets.all(5),
+                                margin: EdgeInsets.symmetric(horizontal: 20),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: Colors.blue,
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(
+                                    25.0,
+                                  ),
+                                ),
+                                child: TabBar(
+                                  controller: tabController,
+                                  indicator: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                      25.0,
+                                    ),
+                                    color: Colors.green,
+                                  ),
+                                  labelColor: Colors.limeAccent,
+                                  unselectedLabelColor: Colors.black,
+                                  tabs: [
+                                    Tab(
+                                      text: 'Shop',
+                                    ),
+                                    Tab(
+                                      text: 'Activity',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Expanded(
+                                child: TabBarView(
+                                  controller: tabController,
+                                  children: [
+                                    shopView(),
+                                    activityView(),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            );
+          })
     );
   }
 

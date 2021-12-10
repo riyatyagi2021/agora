@@ -15,7 +15,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'login_bloc.dart';
 import 'login_event.dart';
 import 'login_state.dart';
-
+import 'package:agora/Constants/constants.dart';
 final themeColor = new Color(0xfff5a623);
 
 class Login extends StatefulWidget {
@@ -151,10 +151,7 @@ class _LoginState extends State<Login> {
                                       onChanged: (String email) =>
                                           loginbloc.add(EmailEvent(email)),
                                       keyboardType: TextInputType.emailAddress,
-                                      decoration: InputDecoration.collapsed(
-                                          hintText: "Enter your email",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black.withOpacity(0.3))),
+                                      decoration: decoration.copyWith(hintText: "Enter Email")
                                     ),
                                   ),
                                 ),
@@ -207,10 +204,7 @@ class _LoginState extends State<Login> {
                                       inputFormatters: [
                                         FilteringTextInputFormatter.deny(' '),
                                       ], //RegExp("[a-z]")
-                                      decoration: InputDecoration.collapsed(
-                                          hintText: "Enter your password",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black.withOpacity(0.3))),
+                                      decoration:decoration
                                     ),
                                   ),
                                 ),

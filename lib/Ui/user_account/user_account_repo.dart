@@ -1,6 +1,6 @@
 
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:agora/Ui/auth/login/login_repository.dart';
 import 'package:agora/Ui/user_account/user_model.dart';
 import 'package:http/http.dart' as http;
@@ -9,6 +9,11 @@ class UserViewRepository {
 
   Future<UserViewModel> userViewApi(
       int platform, String accessToken,String userId ) async {
+
+    final params = {
+    'UserId': userId
+    };
+
 
     final UserProfileRes = await http.get(
         Uri.parse('https://devapi.joinaurum.com/api/v1/user/view/userId'),
