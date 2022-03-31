@@ -76,6 +76,7 @@ print("${userViewModel.res?.user?.followers} folllowers");
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 60,
+        automaticallyImplyLeading: true,
         backgroundColor: Colors.green[400],
         centerTitle: true,
         title: Text(

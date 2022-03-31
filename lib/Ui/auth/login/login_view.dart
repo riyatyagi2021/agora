@@ -4,7 +4,6 @@ import 'package:agora/Ui/auth/signup/signup_bloc.dart';
 import 'package:agora/Ui/auth/signup/signup_view.dart';
 import 'package:agora/Ui/home/home_bloc.dart';
 import 'package:agora/Ui/home/home_view.dart';
-import 'package:agora/Ui/home/products_repository.dart';
 import 'package:agora/Utils/preference_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -12,10 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
 import 'login_bloc.dart';
 import 'login_event.dart';
 import 'login_state.dart';
-import 'package:agora/Constants/constants.dart';
+
 final themeColor = new Color(0xfff5a623);
 
 class Login extends StatefulWidget {
@@ -40,7 +40,6 @@ class _LoginState extends State<Login> {
     }*/
   }
 
-
   @override
   void dispose() {
     email.dispose();
@@ -58,37 +57,42 @@ class _LoginState extends State<Login> {
         listener: (context, state) {
           print("my states${state.isGoogleApiSuccess}");
           if (state.isSuccess) {
-           //print("login${state}");
+            //print("login${state}");
             isLoading = false;
 
-            LoginModel model=state.model;
+            LoginModel model = state.model;
             PreferenceUtils.setAccessToken(model.res!.accessToken.toString());
             PreferenceUtils.setLoginBp(model.res!.bP.toString());
             PreferenceUtils.setUserProfile(model.res!.user!);
             PreferenceUtils.setLoginEmail(model.res!.user!.email.toString());
             PreferenceUtils.setLoginName(model.res!.user!.name.toString());
-            PreferenceUtils.setLoginUserName(model.res!.user!.username.toString());
+            PreferenceUtils.setLoginUserName(
+                model.res!.user!.username.toString());
             PreferenceUtils.setLoginUserId(model.res!.user!.userId.toString());
-            PreferenceUtils.setLoginProfile(model.res!.bP.toString()+model.res!.user!.img.toString());
+            PreferenceUtils.setLoginProfile(
+                model.res!.bP.toString() + model.res!.user!.img.toString());
 
             // Navigator.push(
             //     context, MaterialPageRoute(builder: (context) => Home(loginModel: model,)));
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder:
-                    (context) => BlocProvider<HomeBloc>(
-                  create: (context)=> HomeBloc(), child: Home(loginModel: model), )
-                ));
-
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => BlocProvider<HomeBloc>(
+                          create: (context) => HomeBloc(),
+                          child: Home(loginModel: model),
+                        )));
           } else if (state.isError) {
             isLoading = false;
             Fluttertoast.showToast(msg: "Check email and password");
-          }else if(state.isGoogleApiSuccess){
-            print(state.isGoogleApiSuccess.toString()+"mnbvcxz");
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder:
-                    (context) => BlocProvider<HomeBloc>(
-                  create: (context)=> HomeBloc(), child: Home(), )
-                ));
+          } else if (state.isGoogleApiSuccess) {
+            print(state.isGoogleApiSuccess.toString() + "mnbvcxz");
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => BlocProvider<HomeBloc>(
+                          create: (context) => HomeBloc(),
+                          child: Home(),
+                        )));
           }
         },
         builder: (context, state) {
@@ -125,7 +129,8 @@ class _LoginState extends State<Login> {
                             Text(
                               "Login to your account!",
                               style: TextStyle(
-                                  fontSize: 15, color: Colors.black.withOpacity(0.5)),
+                                  fontSize: 15,
+                                  color: Colors.black.withOpacity(0.5)),
                             ),
                             Stack(
                               children: <Widget>[
@@ -143,23 +148,28 @@ class _LoginState extends State<Login> {
                                     decoration: BoxDecoration(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(30)),
-                                      border:
-                                          Border.all(color: Colors.grey, width: 2.0),
+                                      border: Border.all(
+                                          color: Colors.grey, width: 2.0),
                                     ),
                                     child: TextField(
-                                      controller: email,
-                                      onChanged: (String email) =>
-                                          loginbloc.add(EmailEvent(email)),
-                                      keyboardType: TextInputType.emailAddress,
-                                      decoration: decoration.copyWith(hintText: "Enter Email")
-                                    ),
+                                        controller: email,
+                                        onChanged: (String email) =>
+                                            loginbloc.add(EmailEvent(email)),
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        decoration: InputDecoration.collapsed(
+                                            hintText: "Enter your password",
+                                            hintStyle: TextStyle(
+                                                color: Colors.black
+                                                    .withOpacity(0.3)))),
                                   ),
                                 ),
                                 Positioned(
                                   left: 10,
                                   bottom: 40,
                                   child: Container(
-                                      margin: EdgeInsets.fromLTRB(70, 50, 50, 2),
+                                      margin:
+                                          EdgeInsets.fromLTRB(70, 50, 50, 2),
                                       color: Colors.white,
                                       child: Row(
                                         children: [
@@ -193,26 +203,31 @@ class _LoginState extends State<Login> {
                                     decoration: BoxDecoration(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(30)),
-                                      border:
-                                          Border.all(color: Colors.grey, width: 2.0),
+                                      border: Border.all(
+                                          color: Colors.grey, width: 2.0),
                                     ),
                                     child: TextField(
-                                      controller: password,
-                                      onChanged: (String password) =>
-                                          loginbloc.add(PasswordEvent(password)),
-                                      //obscureText:  true ,//_obscureText
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.deny(' '),
-                                      ], //RegExp("[a-z]")
-                                      decoration:decoration
-                                    ),
+                                        controller: password,
+                                        onChanged: (String password) =>
+                                            loginbloc
+                                                .add(PasswordEvent(password)),
+                                        //obscureText:  true ,//_obscureText
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.deny(' '),
+                                        ], //RegExp("[a-z]")
+                                        decoration: InputDecoration.collapsed(
+                                            hintText: "Enter your password",
+                                            hintStyle: TextStyle(
+                                                color: Colors.black
+                                                    .withOpacity(0.3)))),
                                   ),
                                 ),
                                 Positioned(
                                   left: 10,
                                   bottom: 40,
                                   child: Container(
-                                      margin: EdgeInsets.fromLTRB(70, 50, 50, 2),
+                                      margin:
+                                          EdgeInsets.fromLTRB(70, 50, 50, 2),
                                       color: Colors.white,
                                       child: Row(
                                         children: [
@@ -237,7 +252,8 @@ class _LoginState extends State<Login> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => ForgotPassword()));
+                                            builder: (context) =>
+                                                ForgotPassword()));
                                   },
                                   child: Text(
                                     "Forgot Password?",
@@ -266,16 +282,15 @@ class _LoginState extends State<Login> {
                                         color: Colors.white),
                                   ),
                                   onPressed: (state.isValidationSuccess &&
-                                      state.isEmailValid &&
-                                      state.isPasswordvalid)
+                                          state.isEmailValid &&
+                                          state.isPasswordvalid)
                                       ? () {
-
-                                    setState(() {
-                                      isLoading = true;
-                                    });
-                                    loginbloc.add(OnLoginApiHit(
-                                        email.text, password.text));
-                                  }
+                                          setState(() {
+                                            isLoading = true;
+                                          });
+                                          loginbloc.add(OnLoginApiHit(
+                                              email.text, password.text));
+                                        }
                                       : null,
                                 ),
                               ),
@@ -323,10 +338,11 @@ class _LoginState extends State<Login> {
                                       color: Colors.red,
                                     ),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         GestureDetector(
-                                          onTap:(){
+                                          onTap: () {
                                             loginbloc.add(OnLoginWithGoogle());
 
                                             //Fluttertoast.showToast(msg: "msg");
@@ -351,7 +367,8 @@ class _LoginState extends State<Login> {
                                       color: Colors.indigo,
                                     ),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Text(
                                           "f",
@@ -372,16 +389,18 @@ class _LoginState extends State<Login> {
                   ),
                 ),
               ),
-              isLoading ? Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(themeColor),
-                  ),
-                ),
-                color: Colors.green.shade50.withOpacity(0.8),
-              ) :Container()
+              isLoading
+                  ? Container(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(themeColor),
+                        ),
+                      ),
+                      color: Colors.green.shade50.withOpacity(0.8),
+                    )
+                  : Container()
             ],
           );
         },

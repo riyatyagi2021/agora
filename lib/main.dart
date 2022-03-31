@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import 'Ui/auth/login/login_bloc.dart';
 import 'Ui/auth/login/login_view.dart';
@@ -58,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
   getAccessToken() {
     PreferenceUtils.getAccessToken().then((token) {
       ACCESS_TOKEN = token.toString();
-      Fluttertoast.showToast(msg: "tokenn " + ACCESS_TOKEN);
+      // Fluttertoast.showToast(msg: "tokenn " + ACCESS_TOKEN);
       print(ACCESS_TOKEN + "  accesstoken");
     });
   }
@@ -130,16 +129,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                     child: Login(),
                                   )));
                     } else {
-                      // Navigator.push(context,MaterialPageRoute(builder:(context)=>Home()));
-
-
-
-
-
-                        // Future.delayed(Duration(milliseconds: 5000));
-                        // isLoading = false;
-
-
                       Navigator.push(
                           context,
                           MaterialPageRoute(

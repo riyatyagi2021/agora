@@ -113,7 +113,7 @@ SocialRepository socialRepository=SocialRepository();
       return respp;
     } else {
       //  Fluttertoast.showToast(msg: "Please try using different id");
-      return throw Exception("There is something wrong");
+      return respp;
     }
   }
 
